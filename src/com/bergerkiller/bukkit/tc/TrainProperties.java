@@ -50,6 +50,7 @@ public class TrainProperties {
 	public boolean pushAway = false;
 	public double speedLimit = 0.4;
 	public boolean requirePoweredMinecart = false;
+	public String destination = "";
 	
 	public void showEnterMessage(Entity forEntity) {
 		if (forEntity instanceof Player && enterMessage != null && !enterMessage.equals("")) {
