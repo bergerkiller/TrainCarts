@@ -72,11 +72,15 @@ public class SignActionEvent extends Event implements Cancellable {
 		}
 	}
 	public void setRails(BlockFace to) {
-		BlockUtil.setRails(this.getRails(), this.getFacing(), to);
+		BlockUtil.setRails(this.getRails(), this.getMember().getDirection().getOppositeFace(), to);
 	}
 	public void setRailsRelative(BlockFace direction) {
-		BlockFace main = this.getFacing().getOppositeFace();
+		BlockFace main = this.getMember().getDirection();
 		setRails(FaceUtil.offset(main, direction));
+	}
+	public BlockFace getDestDir(String destination){
+	  
+	  return BlockFace.EAST;
 	}
 	
 	public ActionType getAction() {

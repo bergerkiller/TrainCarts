@@ -238,6 +238,7 @@ public class TrainProperties {
 		this.pushAtStation = config.getBoolean(key + ".pushAway.atStation", this.pushAtStation);
 		this.speedLimit = config.getDouble(key + ".speedLimit", this.speedLimit);
 		this.requirePoweredMinecart = config.getBoolean(key + ".requirePoweredMinecart", this.requirePoweredMinecart);
+		this.destination = config.getString(key + ".destination", this.destination);
 	}
 	public void load(TrainProperties source) {
 		this.owners.addAll(source.owners);
@@ -257,6 +258,7 @@ public class TrainProperties {
 		this.pushAtStation = source.pushAtStation;
 		this.speedLimit = source.speedLimit;
 		this.requirePoweredMinecart = source.requirePoweredMinecart;
+    this.destination = source.destination;
 	}
 	public void save(Configuration config, String key) {		
 		config.setProperty(key + ".owners", this.owners);
@@ -276,6 +278,7 @@ public class TrainProperties {
 		config.setProperty(key + ".pushAway.players", this.pushPlayers);
 		config.setProperty(key + ".pushAway.misc", this.pushMisc);
 		config.setProperty(key + ".pushAway.atStation", this.pushAtStation);
+    config.setProperty(key + ".destination", this.destination);
 	}
 	public static void load(String filename) {
 		Configuration config = new Configuration(new File(filename));

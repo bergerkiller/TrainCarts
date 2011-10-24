@@ -486,8 +486,9 @@ public class CustomEvents {
 				if (info.getLine(1).toLowerCase().startsWith("tag")) {
 					boolean down = false;
 					if (!info.getGroup().getProperties().destination.isEmpty()){
-					  /// \todo Code destination handling. 
-					  info.setRails(BlockFace.WEST);
+					  if (info.isAction(ActionType.GROUP_ENTER)){
+					    info.setRails(info.getDestDir(info.getGroup().getProperties().destination));
+					  }
 					}else{
 					  if (info.isAction(ActionType.GROUP_ENTER) && info.isFacing()) {
 					    //get the tags

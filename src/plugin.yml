@@ -33,6 +33,9 @@ permissions:
     train.build.propertychanger:
         description: Allows you to build a sign which changes properties of trains
         default: op
+    train.build.destination:
+        description: Allows you to build the train destination signs
+        default: op
     train.place.minecart:
         description: Allows you to place a minecart
         default: true

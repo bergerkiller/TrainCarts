@@ -70,6 +70,13 @@ public class TCBlockListener extends BlockListener {
 				} else {
 					event.getPlayer().sendMessage(ChatColor.GREEN + "You built a train destructor!");
 				}
+      } else if (line.toLowerCase().startsWith("destination")) {
+        if (!event.getPlayer().hasPermission("train.build.destination")) {
+          event.setCancelled(true);
+          event.getPlayer().sendMessage(ChatColor.RED + "You don't have permission to use this sign");
+        } else {
+          event.getPlayer().sendMessage(ChatColor.GREEN + "You built a train destination!");
+        }
 			} else if (line.toLowerCase().startsWith("eject")) {
 				if (!event.getPlayer().hasPermission("train.build.ejector")) {
 					event.setCancelled(true);
