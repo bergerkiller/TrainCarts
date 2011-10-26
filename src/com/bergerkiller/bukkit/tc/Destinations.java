@@ -70,21 +70,21 @@ public class Destinations {
     //is this us? return DOWN;
     if (reqname == destname){return new Destination(BlockFace.DOWN, 0.0);}
     //were we already checked? cancel by returning unknown.
-    if (checked.contains(destname)){return new Destination(BlockFace.UP, 10000.0);}
+    if (checked.contains(destname)){return new Destination(BlockFace.UP, 100000.0);}
     //put ourselves in the checked list, preventing loops.
     checked.add(destname);
     //first check what we already know
     if (dests.containsKey(reqname)){return dests.get(reqname);}
-    if (dests.isEmpty()){
-      explore(BlockFace.NORTH);
-      explore(BlockFace.EAST);
-      explore(BlockFace.SOUTH);
-      explore(BlockFace.WEST);
-    }
+    explore(BlockFace.NORTH);
+    explore(BlockFace.EAST);
+    explore(BlockFace.SOUTH);
+    explore(BlockFace.WEST);
     if (dests.containsKey(reqname)){return dests.get(reqname);}
-    //destination not known - try asking all known destinations if they can reach this    
-    Destination r = new Destination(BlockFace.UP, 10000.0);
-    for (String other : dests.keySet()){
+    //destination not known - try asking all known destinations if they can reach this
+    Destination r = new Destination(BlockFace.UP, 100000.0);
+    List<String> keys = new ArrayList<String>();
+    keys.addAll(dests.keySet());
+    for (String other : keys){
       Destination node = dests.get(other);
       Destination end = get(other).getDir(reqname);
       if (end.getDir() != BlockFace.UP){
@@ -95,7 +95,7 @@ public class Destinations {
       }
     }
     //save and return what we could find
-    dests.put(reqname, r);
+    updateDest(reqname, r.getDir(), r.getDist());
     return r;
   }
 
@@ -126,17 +126,49 @@ public class Destinations {
           }
           if (newdest == destname){newdest = "";}
           if (!newdest.isEmpty()){
-            //if we already know about this destination, and we are not faster, ignore it.
-            if (dests.containsKey(newdest)){
-              if (dests.get(newdest).getDist() < map.getTotalDistance()+1){return;}
-            }
-            //otherwise, save.
-            dests.put(newdest, new Destination(dir, map.getTotalDistance()+1));
+            updateDest(newdest, dir, map.getTotalDistance()+1);
             return;
           }
         }
       }
       tmp = map.next();
+    }
+  }
+  
+  /**
+   * Checks if this destination calculation is faster than all
+   * currently known ones, and if yes saves it, propagating the
+   * change to all connected nodes.
+   * @param newdest Name of the destination to check.
+   * @param newdir Direction the destination is in, with this distance.
+   * @param newdist Distance the destination is in, with this direction.
+   */
+  private void updateDest(String newdest, BlockFace newdir, double newdist){
+    boolean isNew = false;
+    if (newdist >= 100000.0){return;} //don't store failed calculations
+    //if we already know about this destination, and we are not faster, ignore it.
+    if (dests.containsKey(newdest)){
+      if (dests.get(newdest).getDist() <= newdist){return;}
+    }else{
+      isNew = true;
+    }
+    //otherwise, save.
+    dests.put(newdest, new Destination(newdir, newdist));
+    //also, check all other points and update this destination there, if better.
+    List<String> keys = new ArrayList<String>();
+    keys.addAll(properties.keySet());
+    for (String propkey : keys){
+      Destinations D = properties.get(propkey);
+      if (D.destname == this.destname){continue;}//skip self
+      Destination node = D.getDir(this.destname);
+      D.updateDest(newdest, node.getDir(), newdist+node.getDist());
+    }
+    //lastly, if this was a new point, check if it has any faster routes for us
+    if (isNew){
+      Destinations D = get(newdest);
+      for (String posNode : D.dests.keySet()){
+        updateDest(posNode, newdir, newdist + D.dests.get(posNode).getDist());
+      }
     }
   }
 
