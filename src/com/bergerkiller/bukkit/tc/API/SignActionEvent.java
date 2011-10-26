@@ -7,6 +7,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 
+import com.bergerkiller.bukkit.tc.Destinations;
 import com.bergerkiller.bukkit.tc.MinecartGroup;
 import com.bergerkiller.bukkit.tc.MinecartMember;
 import com.bergerkiller.bukkit.tc.Utils.BlockUtil;
@@ -78,9 +79,16 @@ public class SignActionEvent extends Event implements Cancellable {
 		BlockFace main = this.getMember().getDirection();
 		setRails(FaceUtil.offset(main, direction));
 	}
+	
+	/**
+	 * Finds the direction to go in to reach destination from here.
+	 * Designed to be used by self-routing tag signs.
+	 * If the destination is not known or reachable, goes NORTH.
+	 * @param destination The wanted destination to reach.
+	 * @return The direction to go in to reach the wanted destination.
+	 */
 	public BlockFace getDestDir(String destination){
-	  
-	  return BlockFace.EAST;
+	  return Destinations.getDir(destination, this.getLocation().add(0, 2, 0));
 	}
 	
 	public ActionType getAction() {

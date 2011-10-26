@@ -180,6 +180,9 @@ public class TrainCarts extends JavaPlugin {
 		//Load properties
 		TrainProperties.load(getDataFolder() + File.separator + "trainflags.yml");
 		
+		//Load destinations
+		Destinations.load(getDataFolder() + File.separator + "destinations.yml");
+		
 		//Load arrival times
 		ArrivalSigns.load(getDataFolder() + File.separator + "arrivaltimes.txt");
 		
@@ -236,6 +239,9 @@ public class TrainCarts extends JavaPlugin {
 		//Save properties
 		TrainProperties.save(getDataFolder() + File.separator + "trainflags.yml");
 		
+		//Save destinations
+		Destinations.save(getDataFolder() + File.separator + "destinations.yml");
+		
 		//Save for next load
 		GroupManager.saveGroups(getDataFolder() + File.separator + "trains.groupdata");
 
@@ -246,6 +252,13 @@ public class TrainCarts extends JavaPlugin {
 		if (args.length == 0) return false;
 		cmd = args[0].toLowerCase();
 		args = Util.remove(args, 0);
+		if (cmd.equals("reroute")){
+      if (!(sender instanceof Player) || ((Player) sender).hasPermission("train.build.destination")) {
+         Destinations.clear();
+         sender.sendMessage("All train routings will be recalculated.");
+         return true;
+      }
+		}
 		if (cmd.equals("removeall") || cmd.equals("destroyall")) {
 			if (!(sender instanceof Player) || ((Player) sender).hasPermission("train.command.remove")) {
 				boolean destroy = cmd.equals("destroyall");
