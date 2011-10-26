@@ -180,6 +180,9 @@ public class TrainCarts extends JavaPlugin {
 		//Load properties
 		TrainProperties.load(getDataFolder() + File.separator + "trainflags.yml");
 		
+		//Load destinations
+		Destinations.load(getDataFolder() + File.separator + "destinations.yml");
+		
 		//Load arrival times
 		ArrivalSigns.load(getDataFolder() + File.separator + "arrivaltimes.txt");
 		
@@ -236,6 +239,9 @@ public class TrainCarts extends JavaPlugin {
 		//Save properties
 		TrainProperties.save(getDataFolder() + File.separator + "trainflags.yml");
 		
+		//Save destinations
+		Destinations.save(getDataFolder() + File.separator + "destinations.yml");
+		
 		//Save for next load
 		GroupManager.saveGroups(getDataFolder() + File.separator + "trains.groupdata");
 
@@ -246,6 +252,13 @@ public class TrainCarts extends JavaPlugin {
 		if (args.length == 0) return false;
 		cmd = args[0].toLowerCase();
 		args = Util.remove(args, 0);
+		if (cmd.equals("reroute")){
+      if (!(sender instanceof Player) || ((Player) sender).hasPermission("train.build.destination")) {
+         Destinations.clear();
+         sender.sendMessage("All train routings will be recalculated.");
+         return true;
+      }
+		}
 		if (cmd.equals("removeall") || cmd.equals("destroyall")) {
 			if (!(sender instanceof Player) || ((Player) sender).hasPermission("train.command.remove")) {
 				boolean destroy = cmd.equals("destroyall");
@@ -354,6 +367,9 @@ public class TrainCarts extends JavaPlugin {
 					} else {
 						p.sendMessage(ChatColor.YELLOW + "Enterable by: " + ChatColor.WHITE + " " + Util.combineNames(prop.passengers));
 					}
+					if (!prop.destination.isEmpty()){
+					  p.sendMessage(ChatColor.YELLOW + "This train will ignore tag switches and attempt to reach " + ChatColor.WHITE + prop.destination);
+					}
 				} else if (cmd.equals("linking") || cmd.equals("link")) {
 					if (args.length == 1) {
 						prop.allowLinking = Util.getBool(args[0]);
@@ -454,6 +470,14 @@ public class TrainCarts extends JavaPlugin {
 						}
 						p.sendMessage(ChatColor.YELLOW + "You set " + ChatColor.WHITE + Util.combineNames(args) + ChatColor.YELLOW + " as tags for this train!");
 					}
+        } else if (cmd.equals("dest") || cmd.equals("destination")) {
+          if (args.length == 0) {
+            prop.destination = "";
+            p.sendMessage(ChatColor.YELLOW + "Destination for this train cleared!");
+          } else {
+            prop.destination = args[0];
+            p.sendMessage(ChatColor.YELLOW + "You set " + ChatColor.WHITE + args[0] + ChatColor.YELLOW + " as destination for this train!");
+          }
 				} else if (cmd.equals("setcollide") || cmd.equals("setcollision") || cmd.equals("collision") || cmd.equals("collide")) {
 					if (args.length == 1) {
 						prop.trainCollision = Util.getBool(args[0]);
