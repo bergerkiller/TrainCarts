@@ -44,7 +44,7 @@ public class MinecartMember extends NativeMinecartMember {
 	 * Overridden Minecart functions
 	 */
 	@Override
-	public void s_() {
+	public void x_() {
 		motX = Util.fixNaN(motX);
 		motY = Util.fixNaN(motY);
 		motZ = Util.fixNaN(motZ);
@@ -52,7 +52,7 @@ public class MinecartMember extends NativeMinecartMember {
 		if (g.size() == 0) {
 			this.group = null;
 			g.remove();
-			super.s_();
+			super.x_();
 		} else {
 			if (g.tail() == this) {
 				if (GroupUpdateEvent.call(g, UpdateStage.FIRST)) {
