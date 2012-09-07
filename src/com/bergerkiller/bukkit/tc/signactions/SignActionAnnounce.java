@@ -16,7 +16,7 @@ public class SignActionAnnounce extends SignAction {
 	public static void sendMessage(SignActionEvent info, MinecartGroup group) {
 		String msg = getMessage(info);
 		for (MinecartMember member : group) {
-			if (!member.hasPlayerPassenger()) return;
+			if (!member.hasPlayerPassenger()) continue;
 			Player player = (Player) member.getPassenger();
 			sendMessage(msg, player);
 		}
