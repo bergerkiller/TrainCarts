@@ -35,6 +35,7 @@ import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Rails;
+import org.bukkit.projectiles.ProjectileSource;
 
 import com.bergerkiller.bukkit.common.collections.EntityMap;
 import com.bergerkiller.bukkit.common.entity.CommonEntity;
@@ -270,7 +271,10 @@ public class TCListener implements Listener {
 		}
 		Entity attacker = event.getAttacker();
 		if (attacker instanceof Projectile) {
-			attacker = ((Projectile) attacker).getShooter();
+			ProjectileSource src = ((Projectile) attacker).getShooter();
+			if (src instanceof Entity) {
+				attacker = (Entity) src;
+			}
 		}
 		if(attacker instanceof Player && Permission.BREAK_MINECART_ANY.has((Player) attacker)) {
 			return;

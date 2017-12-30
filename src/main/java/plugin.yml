@@ -1,4 +1,4 @@
-name: Train Carts
+name: Train_Carts
 main: com.bergerkiller.bukkit.tc.TrainCarts
 version: ${project.version}
 authors: [bergerkiller, lenis0012, timstans]
