@@ -1,3 +1,7 @@
+## Legacy
+This is a much older version of Traincarts that is no longer maintained. You can find the up-to-date maintained TeamBergerhealer fork [here](https://github.com/bergerhealer/TrainCarts).
+
+## About
 This Minecraft Bukkit server plugin links carts together to form trains you can control!
 Public transportation redefined. :)
 
